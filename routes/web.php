@@ -3,6 +3,7 @@
 use App\Livewire\QuestionCreate;
 use App\Livewire\QuestionList;
 use App\Livewire\QuestionShow;
+use App\Livewire\QuestionEdit;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -27,8 +28,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/questions', QuestionList::class)->name('questions');
     Route::get('/questions/create', QuestionCreate::class)->name('questions.create');
     Route::get('/questions/{question}', QuestionShow::class)->name('questions.show');
-    Route::get('questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
-    Route::put('questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
+    Route::get('/questions/{question}/edit', QuestionEdit::class)->name('questions.edit');
 });
 
 require __DIR__.'/auth.php';

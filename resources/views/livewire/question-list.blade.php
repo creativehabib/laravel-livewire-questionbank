@@ -67,7 +67,7 @@
                     <td class="px-4 py-3">{{ $q->subject->name }}</td>
                     <td class="px-4 py-3">{{ $q->chapter->name }}</td>
                     <td class="px-4 py-3 text-center justify-center">
-                        <button class="px-3 py-1 text-sm font-medium rounded bg-blue-500 text-white hover:bg-blue-600 transition">Edit</button>
+                        <a href="{{ route('questions.edit', $q) }}" class="px-3 py-1 text-sm font-medium rounded bg-blue-500 text-white hover:bg-blue-600 transition">Edit</a>
                         <button class="px-3 py-1 text-sm font-medium rounded bg-red-500 text-white hover:bg-red-600 transition">Delete</button>
                     </td>
                 </tr>
