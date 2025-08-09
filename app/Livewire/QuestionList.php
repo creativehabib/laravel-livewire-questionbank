@@ -31,9 +31,16 @@ class QuestionList extends Component
         $this->resetPage();
     }
 
+    public function delete($id)
+    {
+        $question = Question::findOrFail($id);
+        $question->delete();
+        $this->dispatchBrowserEvent('toast', ['message' => 'Question deleted successfully!', 'type' => 'danger']);
+    }
+
     public function render()
     {
-        $questions = Question::with(['subject', 'chapter'])
+        $questions = Question::with(['subject', 'chapter', 'tags'])
             ->when($this->search, function ($q) {
                 $q->where(function ($query) {
                     $query->where('question', 'like', '%' . $this->search . '%')
