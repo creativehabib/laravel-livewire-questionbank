@@ -1,10 +1,4 @@
 <div class="p-6 bg-white dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-lg border border-gray-200 dark:border-gray-800 transition-all">
-    {{-- Flash Success Message --}}
-    @if(session()->has('message'))
-        <div class="bg-green-500 text-white p-2 rounded mb-4">
-            {{ session('message') }}
-        </div>
-    @endif
 
     <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">Create New Question</h2>
 
@@ -14,6 +8,15 @@
             <label for="question" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question</label>
             <input type="text" wire:model="question" id="question" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all">
             @error('question')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <!-- Description Input -->
+        <div>
+            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+            <textarea wire:model="description" id="description" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all"></textarea>
+            @error('description')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
@@ -70,6 +73,19 @@
                 @endforeach
             </select>
             @error('chapter_id')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <!-- Tag Selection -->
+        <div>
+            <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tags</label>
+            <select wire:model="selected_tags" id="tags" multiple class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all">
+                @foreach($tags as $tag)
+                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                @endforeach
+            </select>
+            @error('selected_tags')
             <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>

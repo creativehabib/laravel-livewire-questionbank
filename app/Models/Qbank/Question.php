@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    protected $fillable = ['question', 'options', 'correct_answer_index', 'subject_id', 'chapter_id'];
+    protected $fillable = [
+        'question',
+        'description',
+        'options',
+        'correct_answer_index',
+        'subject_id',
+        'chapter_id',
+    ];
 
     /**
      * Get the subject associated with the question.
@@ -22,5 +29,13 @@ class Question extends Model
     public function chapter()
     {
         return $this->belongsTo(Chapter::class, 'chapter_id');  // Define the relationship
+    }
+
+    /**
+     * Tags attached to the question.
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }

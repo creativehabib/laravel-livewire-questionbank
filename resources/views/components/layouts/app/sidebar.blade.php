@@ -133,6 +133,20 @@
 
         {{ $slot }}
 
+        <div id="toast-container" class="fixed bottom-4 right-4 space-y-2 z-50"></div>
+        <script>
+            window.addEventListener('toast', event => {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                const type = event.detail.type || 'success';
+                const bg = type === 'danger' ? 'bg-red-500' : 'bg-green-500';
+                toast.className = `${bg} text-white px-4 py-2 rounded shadow`;
+                toast.textContent = event.detail.message;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            });
+        </script>
+
         @fluxScripts
     </body>
 </html>
