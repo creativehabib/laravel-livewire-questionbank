@@ -30,7 +30,22 @@ class QuestionList extends Component
     {
         $this->resetPage();
     }
+    // Delete the question
+    public function deleteQuestion($questionId)
+    {
+        $question = Question::find($questionId);
 
+        if ($question) {
+            // Delete the question
+            $question->delete();
+
+            // Flash message after successful deletion
+            session()->flash('message', 'Question deleted successfully!');
+
+            // Refresh the questions list after deletion
+            $this->questions = Question::paginate(10);
+        }
+    }
     public function render()
     {
         $questions = Question::with(['subject', 'chapter'])

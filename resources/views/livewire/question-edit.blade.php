@@ -1,101 +1,92 @@
 <div class="p-6 bg-white dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow-lg border border-gray-200 dark:border-gray-800 transition-all">
-
     <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">Edit Question</h2>
 
-    <form wire:submit.prevent="update" class="space-y-6">
-        <!-- Question Input -->
+    <form wire:submit.prevent="update" class="space-y-6 mt-4">
+        <!-- Question -->
         <div>
-            <label for="question" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question</label>
-            <input type="text" wire:model="question" id="question" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all">
-            @error('question')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question</label>
+            <input type="text" wire:model.defer="question" class="w-full mt-1 p-3 border rounded-lg dark:bg-gray-800 dark:border-gray-700" />
+            @error('question') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Description Input -->
+        <!-- Description -->
         <div>
-            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
-            <textarea wire:model="description" id="description" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all"></textarea>
-            @error('description')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+            <textarea wire:model.defer="description" class="w-full mt-1 p-3 border rounded-lg dark:bg-gray-800 dark:border-gray-700"></textarea>
+            @error('description') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Options Input -->
+        <!-- Options with radio for correct -->
         <div>
-            <label for="options" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Options</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Options</label>
             <div class="space-y-3">
-                @for($i = 0; $i < 4; $i++)
-                    <input type="text" wire:model="options.{{ $i }}" placeholder="Option {{ $i + 1 }}" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all">
-                    @error("options.$i")
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                @endfor
+                @foreach($options as $i => $opt)
+                    <div class="flex items-center gap-3">
+                        <input type="radio" wire:model="correct_answer_index" value="{{ $i }}" class="h-4 w-4 text-indigo-600" />
+                        <input type="text" wire:model.defer="options.{{ $i }}" placeholder="Option {{ $i + 1 }}" class="flex-1 p-2 border rounded dark:bg-gray-800 dark:border-gray-700" />
+                        <button type="button" wire:click="removeOption({{ $i }})" class="text-sm text-red-500 hover:text-red-700" @if(count($options) <= 2) disabled @endif>Delete</button>
+                    </div>
+                    @error("options.$i") <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+                @endforeach
+            </div>
+
+            <div class="mt-2">
+                <button type="button" wire:click="addOption" class="px-3 py-1 bg-indigo-600 text-white rounded">Add Option</button>
+            </div>
+            @error('correct_answer_index') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+        </div>
+
+        <!-- Subject & Chapter -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
+                <select wire:model.defer="subject_id" class="w-full mt-1 p-3 border rounded dark:bg-gray-800 dark:border-gray-700">
+                    <option value="">Select Subject</option>
+                    @foreach($subjects as $s)
+                        <option value="{{ $s->id }}">{{ $s->name }}</option>
+                    @endforeach
+                </select>
+                @error('subject_id') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Chapter</label>
+                <select wire:model.defer="chapter_id" class="w-full mt-1 p-3 border rounded dark:bg-gray-800 dark:border-gray-700">
+                    <option value="">Select Chapter</option>
+                    @foreach($chapters as $c)
+                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                    @endforeach
+                </select>
+                @error('chapter_id') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
             </div>
         </div>
 
-        <!-- Correct Answer Selection -->
+        <!-- Tags multiselect -->
         <div>
-            <label for="correct_answer_index" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correct Option</label>
-            <select wire:model="correct_answer_index" id="correct_answer_index" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
-                <option value="">Select Correct Option</option>
-                <option value="0">Option 1</option>
-                <option value="1">Option 2</option>
-                <option value="2">Option 3</option>
-                <option value="3">Option 4</option>
-            </select>
-            @error('correct_answer_index')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Subject Selection -->
-        <div>
-            <label for="subject_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Subject</label>
-            <select wire:model="subject_id" id="subject_id" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
-                <option value="">Select Subject</option>
-                @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
-                @endforeach
-            </select>
-            @error('subject_id')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Chapter Selection -->
-        <div>
-            <label for="chapter_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Chapter</label>
-            <select wire:model="chapter_id" id="chapter_id" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
-                <option value="">Select Chapter</option>
-                @foreach($chapters as $chapter)
-                    <option value="{{ $chapter->id }}">{{ $chapter->name }}</option>
-                @endforeach
-            </select>
-            @error('chapter_id')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Tag Selection -->
-        <div>
-            <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tags</label>
-            <select wire:model="selected_tags" id="tags" multiple class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tags</label>
+            <select wire:model="selected_tags" multiple class="w-full mt-1 p-3 border rounded dark:bg-gray-800 dark:border-gray-700">
                 @foreach($tags as $tag)
                     <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                 @endforeach
             </select>
-            @error('selected_tags')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
+            @error('selected_tags') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Submit Button -->
+        <!-- Submit -->
         <div class="flex justify-end">
-            <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-indigo-800 dark:hover:bg-indigo-700 dark:focus:ring-indigo-500">
-                Update Question
-            </button>
+            <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-lg">Update Question</button>
         </div>
-
     </form>
+
+    <!-- Toast (simple) -->
+    <div x-data="{ show: false, message: '', type: 'success' }"
+         x-on:toast.window="message = $event.detail.message; type = $event.detail.type || 'success'; show = true; setTimeout(()=> show=false, 3000)"
+         class="fixed top-5 right-5 z-50">
+        <template x-if="show">
+            <div x-bind:class="type === 'success' ? 'bg-green-500' : 'bg-red-500'"
+                 class="text-white px-4 py-2 rounded shadow">
+                <span x-text="message"></span>
+            </div>
+        </template>
+    </div>
 </div>
