@@ -23,30 +23,24 @@
 
         <!-- Options Input -->
         <div>
-            <label for="options" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Options</label>
+            <label for="options" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Options</label>
             <div class="space-y-3">
-                @for($i = 0; $i < 4; $i++)
-                    <input type="text" wire:model="options.{{ $i }}" placeholder="Option {{ $i + 1 }}" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all">
-                    @error("options.$i")
+                @foreach($options as $index => $option)
+                    <div class="flex items-center">
+                        <!-- Checkbox to mark the correct option -->
+                        <input type="checkbox" wire:model="optionsChecked.{{ $index }}" value="{{ $index }}" class="mr-2">
+                        <input type="text" wire:model="options.{{ $index }}" placeholder="Option {{ $index + 1 }}" class="border border-transparent focus:border-transparent focus:outline-none focus:ring-0 w-full">
+                        <!-- Delete Button for each option, except the default option -->
+                        @if($index > 0)
+                            <button type="button" wire:click="removeOption({{ $index }})" class="ml-2 text-red-500 hover:text-red-700">Delete</button>
+                        @endif
+                    </div>
+                    @error("options.$index")
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
-                @endfor
+                @endforeach
             </div>
-        </div>
-
-        <!-- Correct Answer Selection -->
-        <div>
-            <label for="correct_answer_index" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correct Option</label>
-            <select wire:model="correct_answer_index" id="correct_answer_index" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
-                <option value="">Select Correct Option</option>
-                <option value="0">Option 1</option>
-                <option value="1">Option 2</option>
-                <option value="2">Option 3</option>
-                <option value="3">Option 4</option>
-            </select>
-            @error('correct_answer_index')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
+            <button type="button" wire:click="addOption" class="text-sm text-blue-600 hover:underline">Add Option</button>
         </div>
 
         <!-- Subject Selection -->
@@ -92,9 +86,7 @@
 
         <!-- Submit Button -->
         <div class="flex justify-end">
-            <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-indigo-800 dark:hover:bg-indigo-700 dark:focus:ring-indigo-500">
-                Create Question
-            </button>
+            <button type="submit" class="cursor-pointer px-6 py-2 bg-blue-600 text-white rounded-lg">Create Question</button>
         </div>
 
     </form>

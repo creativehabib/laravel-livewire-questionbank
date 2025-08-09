@@ -47,7 +47,6 @@
                 <th class="px-4 py-3 text-left">Options</th>
                 <th class="px-4 py-3 text-left">Subject</th>
                 <th class="px-4 py-3 text-left">Chapter</th>
-                <th class="px-4 py-3 text-left">Tags</th>
                 <th class="px-4 py-3 text-center">Actions</th>
             </tr>
             </thead>
@@ -67,14 +66,9 @@
                     </td>
                     <td class="px-4 py-3">{{ $q->subject->name }}</td>
                     <td class="px-4 py-3">{{ $q->chapter->name }}</td>
-                    <td class="px-4 py-3">
-                        @foreach($q->tags as $tag)
-                            <span class="inline-block bg-gray-200 text-gray-800 rounded px-2 py-0.5 text-xs mr-1">{{ $tag->name }}</span>
-                        @endforeach
-                    </td>
                     <td class="px-4 py-3 text-center justify-center">
                         <a href="{{ route('questions.edit', $q) }}" class="px-3 py-1 text-sm font-medium rounded bg-blue-500 text-white hover:bg-blue-600 transition">Edit</a>
-                        <button wire:click="delete({{ $q->id }})" class="px-3 py-1 text-sm font-medium rounded bg-red-500 text-white hover:bg-red-600 transition">Delete</button>
+                        <button class="px-3 py-1 text-sm font-medium rounded bg-red-500 text-white hover:bg-red-600 transition">Delete</button>
                     </td>
                 </tr>
             @empty
