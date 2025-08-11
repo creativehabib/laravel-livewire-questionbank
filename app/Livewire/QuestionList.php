@@ -2,20 +2,21 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\WithSweetAlert;
 use App\Models\Qbank\Question;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class QuestionList extends Component
 {
-    use WithPagination;
+    use WithPagination, WithSweetAlert;
 
     public $search = '';
     public $subject = '';
     public $chapter = '';
 
     protected $paginationTheme = 'tailwind'; // ডার্ক/লাইট টেইলউইন্ডে সাপোর্টের জন্য
-
+    protected $listeners = ['destroy'];
     public function updatingSearch()
     {
         $this->resetPage();
@@ -31,20 +32,26 @@ class QuestionList extends Component
         $this->resetPage();
     }
     // Delete the question
-    public function deleteQuestion($questionId)
+    public function destroy($params)
     {
-        $question = Question::find($questionId);
-
-        if ($question) {
-            // Delete the question
-            $question->delete();
-
-            // Flash message after successful deletion
-            session()->flash('message', 'Question deleted successfully!');
-
-            // Refresh the questions list after deletion
-            $this->questions = Question::paginate(10);
+        // এখন সরাসরি আইডি গ্রহণ করুন
+        $questionId = $params['id'];
+        if ($questionId) {
+            Question::find($questionId)->delete();
+            $this->alert('success', 'ডিলিট সম্পন্ন হয়েছে!');
         }
+    }
+    /**
+     * আপনার delete() মেথডটি ঠিক আছে, এটি পরিবর্তন করার প্রয়োজন নেই।
+     */
+    public function delete($id)
+    {
+        $this->confirm(
+            'আপনি কি নিশ্চিত?',
+            'এটি পুনরুদ্ধার করা যাবে না!',
+            'destroy',
+            ['id' => $id]
+        );
     }
     public function render()
     {

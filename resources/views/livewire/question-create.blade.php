@@ -53,7 +53,7 @@
         <!-- Subject Selection -->
         <div>
             <label for="subject_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Subject</label>
-            <select wire:model="subject_id" id="subject_id" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
+            <select wire:model="subject_id" id="subject_id" class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
                 <option value="">Select Subject</option>
                 @foreach($subjects as $subject)
                     <option value="{{ $subject->id }}">{{ $subject->name }}</option>
@@ -67,7 +67,7 @@
         <!-- Chapter Selection -->
         <div>
             <label for="chapter_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Chapter</label>
-            <select wire:model="chapter_id" id="chapter_id" class="w-full mt-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
+            <select wire:model="chapter_id" id="chapter_id" class="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white transition-all" required>
                 <option value="">Select Chapter</option>
                 @foreach($chapters as $chapter)
                     <option value="{{ $chapter->id }}">{{ $chapter->name }}</option>

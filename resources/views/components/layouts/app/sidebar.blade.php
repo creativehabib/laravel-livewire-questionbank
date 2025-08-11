@@ -19,25 +19,10 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group expandable :heading="__('Question')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('questions')" :current="request()->routeIs('questions')" wire:navigate>{{ __('Questions') }}</flux:navlist.item>
-
-                    <flux:navlist.group expandable :heading="__('Subject')">
-                        <flux:navlist.item :href="route('subjects.add')" :current="request()->routeIs('subjects.add')" wire:navigate>{{ __('Add Subject') }}</flux:navlist.item>
-                        <flux:navlist.item :href="route('subjects.edit')" :current="request()->routeIs('subjects.edit')" wire:navigate>{{ __('Edit Subject') }}</flux:navlist.item>
-                        <flux:navlist.item :href="route('subjects.delete')" :current="request()->routeIs('subjects.delete')" wire:navigate>{{ __('Delete Subject') }}</flux:navlist.item>
-                    </flux:navlist.group>
-
-                    <flux:navlist.group expandable :heading="__('Chapter')">
-                        <flux:navlist.item :href="route('chapters.add')" :current="request()->routeIs('chapters.add')" wire:navigate>{{ __('Add Chapter') }}</flux:navlist.item>
-                        <flux:navlist.item :href="route('chapters.edit')" :current="request()->routeIs('chapters.edit')" wire:navigate>{{ __('Edit Chapter') }}</flux:navlist.item>
-                        <flux:navlist.item :href="route('chapters.delete')" :current="request()->routeIs('chapters.delete')" wire:navigate>{{ __('Delete Chapter') }}</flux:navlist.item>
-                    </flux:navlist.group>
-
-                    <flux:navlist.group expandable :heading="__('Tag')">
-                        <flux:navlist.item :href="route('tags.add')" :current="request()->routeIs('tags.add')" wire:navigate>{{ __('Add Tag') }}</flux:navlist.item>
-                        <flux:navlist.item :href="route('tags.edit')" :current="request()->routeIs('tags.edit')" wire:navigate>{{ __('Edit Tag') }}</flux:navlist.item>
-                        <flux:navlist.item :href="route('tags.delete')" :current="request()->routeIs('tags.delete')" wire:navigate>{{ __('Delete Tag') }}</flux:navlist.item>
-                    </flux:navlist.group>
+                    <flux:navlist.item :href="route('questions')" :current="request()->routeIs('questions')" wire:navigate>{{ __('Questions') }}</flux:navlist.item>
+                    <flux:navlist.item :href="route('subjects.index')" :current="request()->routeIs('subjects.index')" wire:navigate>{{ __('Subject') }}</flux:navlist.item>
+                    <flux:navlist.item :href="route('chapters.index')" :current="request()->routeIs('chapters.index')" wire:navigate>{{ __('Add Chapter') }}</flux:navlist.item>
+                    <flux:navlist.item :href="route('tags.index')" :current="request()->routeIs('tags.index')" wire:navigate>{{ __('Add Tag') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -150,20 +135,6 @@
         </flux:header>
 
         {{ $slot }}
-
-        <div id="toast-container" class="fixed bottom-4 right-4 space-y-2 z-50"></div>
-        <script>
-            window.addEventListener('toast', event => {
-                const container = document.getElementById('toast-container');
-                const toast = document.createElement('div');
-                const type = event.detail.type || 'success';
-                const bg = type === 'danger' ? 'bg-red-500' : 'bg-green-500';
-                toast.className = `${bg} text-white px-4 py-2 rounded shadow`;
-                toast.textContent = event.detail.message;
-                container.appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
-            });
-        </script>
 
         @fluxScripts
     </body>

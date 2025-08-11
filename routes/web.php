@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\Qbank\ChapterManager;
+use App\Livewire\Qbank\SubjectManager;
+use App\Livewire\Qbank\TagManager;
 use App\Livewire\QuestionCreate;
 use App\Livewire\QuestionEdit;
 use App\Livewire\QuestionList;
@@ -31,17 +34,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/questions/{question}/edit', QuestionEdit::class)->name('questions.edit');
 
 
-    Route::view('/subjects/add', 'subjects.add')->name('subjects.add');
-    Route::view('/subjects/edit', 'subjects.edit')->name('subjects.edit');
-    Route::view('/subjects/delete', 'subjects.delete')->name('subjects.delete');
-
-    Route::view('/chapters/add', 'chapters.add')->name('chapters.add');
-    Route::view('/chapters/edit', 'chapters.edit')->name('chapters.edit');
-    Route::view('/chapters/delete', 'chapters.delete')->name('chapters.delete');
-
-    Route::view('/tags/add', 'tags.add')->name('tags.add');
-    Route::view('/tags/edit', 'tags.edit')->name('tags.edit');
-    Route::view('/tags/delete', 'tags.delete')->name('tags.delete');
+    Route::get('/subjects', SubjectManager::class)->name('subjects.index');
+    Route::get('/chapters', ChapterManager::class)->name('chapters.index');
+    Route::get('/tags', TagManager::class)->name('tags.index');
 });
 
 require __DIR__.'/auth.php';

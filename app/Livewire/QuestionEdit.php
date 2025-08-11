@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\WithSweetAlert;
 use App\Models\Qbank\Question;
 use App\Models\Qbank\Subject;
 use App\Models\Qbank\Chapter;
@@ -10,6 +11,7 @@ use Livewire\Component;
 
 class QuestionEdit extends Component
 {
+    use WithSweetAlert;
     public $questionModel;
     public $question;
     public $description;
@@ -91,8 +93,8 @@ class QuestionEdit extends Component
         // Sync selected tags
         $this->questionModel->tags()->sync($this->selected_tags);
 
-        // Dispatch success toast message
-//        $this->dispatchBrowserEvent('toast', ['message' => 'Question updated successfully!', 'type' => 'success']);
+        $this->alert('success', 'Welcome!', 'Welcome to the dashboard.', 3000, false);
+
         return redirect()->route('questions');
     }
 

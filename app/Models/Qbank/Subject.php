@@ -8,11 +8,13 @@ class Subject extends Model
 {
     protected $fillable = ['name'];
 
-    /**
-     * Get all the questions for the subject.
-     */
     public function questions()
     {
-        return $this->hasMany(Question::class, 'subject_id');  // Define the inverse relationship
+        return $this->hasMany(Question::class, 'subject_id');
+    }
+
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class, 'subject_id');
     }
 }
