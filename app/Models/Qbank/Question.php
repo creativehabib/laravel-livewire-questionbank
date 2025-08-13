@@ -15,6 +15,10 @@ class Question extends Model
         'chapter_id',
     ];
 
+    protected $casts = [
+        'options' => 'array',
+    ];
+
     /**
      * Get the subject associated with the question.
      */

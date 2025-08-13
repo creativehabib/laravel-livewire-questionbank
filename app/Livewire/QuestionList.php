@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Livewire\Traits\WithSweetAlert;
+use App\Models\Qbank\Chapter;
 use App\Models\Qbank\Question;
+use App\Models\Qbank\Subject;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,8 +17,8 @@ class QuestionList extends Component
     public $subject = '';
     public $chapter = '';
 
-    protected $paginationTheme = 'tailwind'; // ডার্ক/লাইট টেইলউইন্ডে সাপোর্টের জন্য
     protected $listeners = ['destroy'];
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -31,53 +33,41 @@ class QuestionList extends Component
     {
         $this->resetPage();
     }
-    // Delete the question
+
+    public function delete($id)
+    {
+        $this->confirm('আপনি কি নিশ্চিত?', 'এই প্রশ্নটি পুনরুদ্ধার করা যাবে না!', 'destroy', ['id' => $id]);
+    }
+
     public function destroy($params)
     {
-        // এখন সরাসরি আইডি গ্রহণ করুন
         $questionId = $params['id'];
         if ($questionId) {
             Question::find($questionId)->delete();
-            $this->alert('success', 'ডিলিট সম্পন্ন হয়েছে!');
+            $this->alert('success', 'প্রশ্ন ডিলিট সম্পন্ন হয়েছে!');
         }
     }
-    /**
-     * আপনার delete() মেথডটি ঠিক আছে, এটি পরিবর্তন করার প্রয়োজন নেই।
-     */
-    public function delete($id)
-    {
-        $this->confirm(
-            'আপনি কি নিশ্চিত?',
-            'এটি পুনরুদ্ধার করা যাবে না!',
-            'destroy',
-            ['id' => $id]
-        );
-    }
+
     public function render()
     {
         $questions = Question::with(['subject', 'chapter'])
-            ->when($this->search, function ($q) {
-                $q->where(function ($query) {
-                    $query->where('question', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('subject', fn($sub) =>
-                        $sub->where('name', 'like', '%' . $this->search . '%')
-                        )
-                        ->orWhereHas('chapter', fn($chap) =>
-                        $chap->where('name', 'like', '%' . $this->search . '%')
-                        );
-                });
+            ->when($this->search, function ($query) {
+                $query->where('question', 'like', '%' . $this->search . '%')
+                    ->orWhereRelation('subject', 'name', 'like', '%' . $this->search . '%')
+                    ->orWhereRelation('chapter', 'name', 'like', '%' . $this->search . '%');
             })
-            ->when($this->subject, fn($q) =>
-            $q->where('subject_id', $this->subject)
-            )
-            ->when($this->chapter, fn($q) =>
-            $q->where('chapter_id', $this->chapter)
-            )
+            ->when($this->subject, fn($query) => $query->where('subject_id', $this->subject))
+            ->when($this->chapter, fn($query) => $query->where('chapter_id', $this->chapter))
             ->latest()
-            ->paginate(5);
+            ->paginate(10);
+
+        $subjects = Subject::all();
+        $chapters = Chapter::all();
 
         return view('livewire.question-list', [
-            'questions' => $questions
+            'questions' => $questions,
+            'subjects' => $subjects,
+            'chapters' => $chapters,
         ]);
     }
 }

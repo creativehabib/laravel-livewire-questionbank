@@ -18,8 +18,14 @@
             </flux:navlist>
 
             <flux:navlist variant="outline">
+                    <flux:navlist.item icon="layout-grid" :href="route('mock.test')" ...>
+                        {{ __('মক টেস্ট')  }}
+                    </flux:navlist.item>
+            </flux:navlist>
+
+            <flux:navlist variant="outline">
                 <flux:navlist.group expandable :heading="__('Question')" class="grid">
-                    <flux:navlist.item :href="route('questions')" :current="request()->routeIs('questions')" wire:navigate>{{ __('Questions') }}</flux:navlist.item>
+                    <flux:navlist.item :href="route('questions.index')" :current="request()->routeIs('questions.index')" wire:navigate>{{ __('Questions') }}</flux:navlist.item>
                     <flux:navlist.item :href="route('subjects.index')" :current="request()->routeIs('subjects.index')" wire:navigate>{{ __('Subject') }}</flux:navlist.item>
                     <flux:navlist.item :href="route('chapters.index')" :current="request()->routeIs('chapters.index')" wire:navigate>{{ __('Add Chapter') }}</flux:navlist.item>
                     <flux:navlist.item :href="route('tags.index')" :current="request()->routeIs('tags.index')" wire:navigate>{{ __('Add Tag') }}</flux:navlist.item>

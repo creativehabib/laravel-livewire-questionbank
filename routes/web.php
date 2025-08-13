@@ -1,10 +1,13 @@
 <?php
 
+use App\Livewire\ExamPage;
+use App\Livewire\MockTestSetup;
 use App\Livewire\Qbank\ChapterManager;
 use App\Livewire\Qbank\SubjectManager;
 use App\Livewire\Qbank\TagManager;
 use App\Livewire\QuestionCreate;
 use App\Livewire\QuestionEdit;
+use App\Livewire\QuestionForm;
 use App\Livewire\QuestionList;
 use App\Livewire\QuestionShow;
 use Illuminate\Support\Facades\Route;
@@ -28,10 +31,15 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/questions', QuestionList::class)->name('questions');
-    Route::get('/questions/create', QuestionCreate::class)->name('questions.create');
-    Route::get('/questions/{question}', QuestionShow::class)->name('questions.show');
-    Route::get('/questions/{question}/edit', QuestionEdit::class)->name('questions.edit');
+//    Route::get('/questions', QuestionList::class)->name('questions.index');
+//    Route::get('/questions/create', QuestionCreate::class)->name('questions.create');
+//    Route::get('/questions/{question}', QuestionShow::class)->name('questions.show');
+//    Route::get('/questions/{question}/edit', QuestionEdit::class)->name('questions.edit');
+
+    Route::get('/questions', QuestionList::class)->name('questions.index');
+    Route::get('/questions/create', QuestionForm::class)->name('questions.create');
+    Route::get('/questions/{question}/edit', QuestionForm::class)->name('questions.edit');
+
 
 
     Route::get('/subjects', SubjectManager::class)->name('subjects.index');
@@ -39,4 +47,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/tags', TagManager::class)->name('tags.index');
 });
 
+Route::get('/mock-test', MockTestSetup::class)->name('mock.test')->middleware('auth');
+Route::get('/exam', ExamPage::class)->name('exam.start')->middleware('auth');
 require __DIR__.'/auth.php';

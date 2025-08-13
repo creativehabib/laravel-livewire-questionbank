@@ -41,3 +41,7 @@
         {{ $subjects->links() }}
     </div>
 </div>
+
+<script>
+    toastr.info('Are you the 6 fingered man?')
+</script>
