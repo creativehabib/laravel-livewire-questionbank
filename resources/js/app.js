@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import TomSelect from "tom-select";
+import katex from 'katex';
 
 // Tiptap এবং এর এক্সটেনশনগুলো ইম্পোর্ট করুন
 import { Editor } from '@tiptap/core'
@@ -12,6 +13,7 @@ window.TomSelect = TomSelect;
 window.Editor = Editor;
 window.StarterKit = StarterKit;
 window.Mathematics = Mathematics;
+window.katex = katex;
 
 // সাধারণ alert-এর জন্য গ্লোবাল লিসেনার
 window.addEventListener('swal:alert', event => {
@@ -45,4 +47,3 @@ window.addEventListener('swal:confirm', event => {
         }
     });
 });
-

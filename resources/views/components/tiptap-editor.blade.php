@@ -6,6 +6,35 @@
     x-data="{
         value: @entangle($attributes->wire('model')),
         editor: null,
+
+        init() {
+            if (!window.Editor || !window.StarterKit || !window.Mathematics || !window.katex) {
+                console.error('Tiptap editor or required extensions are not loaded!');
+                return;
+            }
+
+            this.editor = new window.Editor({
+                element: this.$refs.element,
+                extensions: [
+                    window.StarterKit,
+                    window.Mathematics.configure({
+                        // প্রয়োজনে এখানে অপশন যোগ করতে পারেন
+                    }),
+                ],
+                content: this.value,
+                onUpdate: ({ editor }) => {
+                    this.value = editor.getHTML();
+                },
+            });
+
+            // Livewire থেকে ডেটা পরিবর্তন হলে এডিটর আপডেট করবে
+            this.$watch('value', (newValue) => {
+                if (this.editor && this.editor.getHTML() !== newValue) {
+                    this.editor.commands.setContent(newValue, false);
+                }
+            });
+        },
+
         addMath() {
             Swal.fire({
                 title: 'Enter LaTeX Code',
@@ -20,62 +49,18 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed && result.value) {
-                    // Insert inline math using TipTap's math extension
-                    this.editor.chain().focus().insertInlineMath({ latex: result.value }).run();
+                    this.editor.chain().focus().insertContent(`<span data-katex-inline>${result.value}</span>`).run();
                 }
             });
         },
-        init() {
-            this.editor = new window.Editor({
-                element: this.$refs.element,
-                extensions: [
-                    window.StarterKit,
-                    window.Mathematics.configure({
-                        inlineOptions: {
-                            onClick: (node) => {
-                                const newCalculation = prompt('Enter new calculation:', node.attrs.latex);
-                                if (newCalculation) {
-                                    this.editor.chain().setNodeSelection(node.pos).updateInlineMath({ latex: newCalculation }).focus().run();
-                                }
-                            }
-                        }
-                    }),
-                ],
-                content: this.value,
-                onUpdate: ({ editor }) => {
-                    this.value = editor.getHTML();
-                },
-            });
-
-            this.$watch('value', (newValue) => {
-                if (this.editor && this.editor.getHTML() !== newValue) {
-                    this.editor.commands.setContent(newValue, false);
-                }
-            });
-        },
-        toggleBold() {
-            // Delay to avoid mismatched transaction
-            setTimeout(() => {
-                if (this.editor) {
-                    this.editor.chain().focus().toggleBold().run();
-                }
-            }, 0);
-        },
-        toggleItalic() {
-            // Delay to avoid mismatched transaction
-            setTimeout(() => {
-                if (this.editor) {
-                    this.editor.chain().focus().toggleItalic().run();
-                }
-            }, 0);
-        }
     }"
+    x-init="init()"
 >
     {{-- টুলবার --}}
     <div x-show="editor" class="toolbar p-2 border-b border-gray-300 dark:border-gray-700 flex flex-wrap items-center gap-2">
         <button
             type="button"
-            @click="toggleBold()"
+            @click="editor.chain().focus().toggleBold().run()"
             :class="{ 'bg-gray-600': editor?.isActive('bold') }"
             class="px-2 py-1 rounded hover:bg-gray-600">
             Bold
@@ -83,7 +68,7 @@
 
         <button
             type="button"
-            @click="toggleItalic()"
+            @click="editor.chain().focus().toggleItalic().run()"
             :class="{ 'bg-gray-600': editor?.isActive('italic') }"
             class="px-2 py-1 rounded hover:bg-gray-600">
             Italic
@@ -106,5 +91,5 @@
     </div>
 
     {{-- এডিটর --}}
-    <div x-ref="element" class="prose dark:prose-invert max-w-none p-4 min-h-[150px]">{!! $value !!}</div>
+    <div x-ref="element" class="prose dark:prose-invert max-w-none p-4 min-h-[150px]"></div>
 </div>
