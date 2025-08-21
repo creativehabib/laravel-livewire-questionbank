@@ -10,6 +10,7 @@ use App\Livewire\QuestionEdit;
 use App\Livewire\QuestionForm;
 use App\Livewire\QuestionList;
 use App\Livewire\QuestionShow;
+use App\Livewire\Admin\MessageRetentionSettings;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -45,6 +46,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/subjects', SubjectManager::class)->name('subjects.index');
     Route::get('/chapters', ChapterManager::class)->name('chapters.index');
     Route::get('/tags', TagManager::class)->name('tags.index');
+    Route::get('/message-settings', MessageRetentionSettings::class)->name('admin.message-settings');
 });
 
 Route::get('/mock-test', MockTestSetup::class)->name('mock.test')->middleware('auth');
