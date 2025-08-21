@@ -32,6 +32,12 @@
                 </flux:navlist.group>
             </flux:navlist>
 
+            <flux:navlist variant="outline">
+                <flux:navlist.group :heading="__('Settings')" class="grid">
+                    <flux:navlist.item :href="route('admin.message-settings')" :current="request()->routeIs('admin.message-settings')" wire:navigate>{{ __('Message Settings') }}</flux:navlist.item>
+                </flux:navlist.group>
+            </flux:navlist>
+
             <flux:spacer />
 
             <flux:navlist variant="outline">
