@@ -41,7 +41,7 @@
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
             @forelse($questions as $q)
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                    <td class="px-4 py-3 font-medium">{{ $q->question }}</td>
+                    <td class="px-4 py-3 font-medium">{!! $q->question !!}</td>
                     <td class="px-4 py-3">
                         @foreach($q->options as $index => $opt)
                             <span class="block @if($index == $q->correct_answer_index) font-bold text-blue-500 @endif">{{ $opt }}</span>

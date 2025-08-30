@@ -3,7 +3,7 @@
         {{-- Question Text --}}
         <div>
             <label for="question" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question</label>
-            <textarea id="question" wire:model.defer="question" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"></textarea>
+            <x-tiptap-editor wire:model="question" id="question" />
             @error('question') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
         </div>
 
