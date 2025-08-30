@@ -48,7 +48,7 @@
                         {{-- প্রশ্ন --}}
                         <div class="flex items-start mb-4">
                             <span class="font-bold text-lg mr-3">{{ $index + 1 }}.</span>
-                            <p class="text-lg text-gray-900">{{ $question->question }}</p>
+                            <p class="text-lg text-gray-900">{{$question->question}}</p>
                         </div>
 
                         {{-- অপশন --}}
